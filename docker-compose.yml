@@ -6,9 +6,8 @@ services:
     build: .
     command: python manage.py runserver 0.0.0.0:8000
     environment:
-      - PRODUCTION=false
       - ALLOWED_HOSTS=*
-      - SECRET_KEY=f(gh08)3wcou4sr)s74o*hj42ul0k1)#6hq5c+*k)n8lm%ly1o
+      - SECRET_KEY=gnfw_(l$kfzhc1!1da+su611suuigb57a=*f!z9(x*kqe5+$dp
     ports:
       - "8000:8000"
     volumes:
