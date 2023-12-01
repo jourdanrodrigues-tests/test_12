@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from app.converters import convert_xml_to_json, xml_parse_error_raise
+from app.converters import convert_xml_to_json, xml_parsing_error_raise
 
 
 class XMLToJSONConverterSerializer(serializers.Serializer):
@@ -10,7 +10,7 @@ class XMLToJSONConverterSerializer(serializers.Serializer):
         fields = ['file']
 
     def validate_file(self, value):
-        with xml_parse_error_raise(serializers.ValidationError('Invalid XML file.')):
+        with xml_parsing_error_raise(serializers.ValidationError('Invalid XML file.')):
             return convert_xml_to_json(value)
 
     def validate(self, attrs):

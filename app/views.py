@@ -15,17 +15,18 @@ def upload_page(request):
     if request.method not in {'POST', 'GET'}:
         return HttpResponse(status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
-    data = None
-    if request.method == 'POST':
+    display_data = None
+    if request.method == 'GET':
+        form = UploadFileForm()
+    else:
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
-            data = json.dumps(form.cleaned_data['file'], indent=4)
-    else:
-        form = UploadFileForm()
+            display_data = json.dumps(form.cleaned_data['file'], indent=4)
+
     return render(
         request,
         "upload_page.html",
-        {"form": form, "data": data},
+        {"form": form, "display_data": display_data},
     )
 
 

@@ -25,7 +25,7 @@
         </form>
         {% if form.is_valid %}
             <h2>JSON</h2>
-            <pre>{{ data | safe }}</pre>
+            <pre>{{ display_data | safe }}</pre>
         {% endif %}
     </body>
 </html>

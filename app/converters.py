@@ -1,11 +1,15 @@
 import contextlib
 from xml.etree import ElementTree
 
+# As more exception show up from parsing XML, add them here
+XML_PARSING_EXCEPTIONS = (ElementTree.ParseError,)
+
 @contextlib.contextmanager
-def xml_parse_error_raise(exception: Exception):
+def xml_parsing_error_raise(exception: Exception):
+    # Reads "with XML parsing error, raise (e.g.) validation error"
     try:
         yield
-    except ElementTree.ParseError:
+    except XML_PARSING_EXCEPTIONS:
         raise exception
 
 
