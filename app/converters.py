@@ -20,7 +20,8 @@ def xml_parsing_error_raise(exception: Exception):
 
 
 def convert_xml_to_json(xml) -> dict:
-    # There are many types this "xml "parameter can be, so we're going to trust exception handling to mitigate the lack of types
+    # There are many types this "xml" parameter can be, so we're going to trust exception handling to mitigate the
+    # lack of typing
     def parse_element(element: ElementTree.Element) -> dict:
         # Don't see a value in exposing this function
         if len(element) == 0:
