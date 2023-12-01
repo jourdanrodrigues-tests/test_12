@@ -1,4 +1,4 @@
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render
 from rest_framework import status
 from rest_framework.decorators import action
@@ -11,19 +11,16 @@ from app.serializers import XMLToJSONConverterSerializer
 
 
 def upload_page(request):
+    if request.method not in ['POST', 'GET']:
+        return HttpResponse(status=status.HTTP_405_METHOD_NOT_ALLOWED)
     if request.method == 'POST':
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
             return JsonResponse(form.cleaned_data['file'])
-        return JsonResponse({'error': 'Invalid form.'}, status=status.HTTP_400_BAD_REQUEST)
-    if request.method == 'GET':
+    else:
         form = UploadFileForm()
-        return render(request, "upload_page.html", {"form": form})
 
-    return JsonResponse(
-        {'error': 'Request method not allowed.'},
-        status=status.HTTP_405_METHOD_NOT_ALLOWED,
-    )
+    return render(request, "upload_page.html", {"form": form})
 
 
 class ConverterViewSet(GenericViewSet):
