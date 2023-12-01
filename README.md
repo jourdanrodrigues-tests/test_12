@@ -12,7 +12,7 @@ It is intended to take 2-4 hours. After you submit your solution (either by emai
  
 ## Setting Up
 
-Install Python 3.7 or later if it is not already installed. Then, set up and enter a virtual environment and run `pip install -r requirements.txt` to install the dependencies. You should then be able to run the project from the `exercise` directory by running `python manage.py runserver`.
+Install Python 3.7 or later if it is not already installed. Then, set up and enter a virtual environment and run `pip install -r requirements.txt` to install the dependencies. You should then be able to run the project from the `core` directory by running `python manage.py runserver`.
 
 To verify that the server is running correctly, visit `http:127.0.0.1:8000` in your browser.
 
