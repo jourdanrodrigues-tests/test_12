@@ -1,0 +1,15 @@
+version: "3"
+
+services:
+  server:
+    container_name: limit_server
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    environment:
+      - PRODUCTION=false
+      - ALLOWED_HOSTS=*
+      - SECRET_KEY=f(gh08)3wcou4sr)s74o*hj42ul0k1)#6hq5c+*k)n8lm%ly1o
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/server
