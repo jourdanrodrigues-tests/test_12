@@ -2,7 +2,12 @@ import contextlib
 from xml.etree import ElementTree
 
 # As more exception show up from parsing XML, add them here
-XML_PARSING_EXCEPTIONS = (ElementTree.ParseError,)
+XML_PARSING_EXCEPTIONS = (
+    ElementTree.ParseError,  # From a PDF file
+    TypeError,  # From "None", "dict", "list", "set", "float", etc.
+    FileNotFoundError,  # From a "str" or "bytes" that doesn't lead to a file
+    OSError,  # From a number
+)
 
 @contextlib.contextmanager
 def xml_parsing_error_raise(exception: Exception):
