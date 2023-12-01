@@ -7,6 +7,13 @@ from rest_framework.test import APITestCase
 TEST_FILES_DIR = os.path.join(settings.BASE_DIR, 'app', 'test_files')
 
 
+class TestGet(APITestCase):
+    def test_that_it_returns_expected_status_code(self):
+        response = self.client.post('/connected/')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
 class TestPost(APITestCase):
     maxDiff = None
 
