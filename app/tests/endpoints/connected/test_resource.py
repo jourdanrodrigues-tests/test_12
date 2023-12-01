@@ -1,10 +1,20 @@
+import json
 import os
+import re
 
 from django.conf import settings
 from rest_framework import status
 from rest_framework.test import APITestCase
 
 TEST_FILES_DIR = os.path.join(settings.BASE_DIR, 'app', 'test_files')
+
+
+def get_json_from_response(response) -> str | None:
+    content = response.content.decode()
+    match = re.search(r'<pre>((.|\s)+)</pre>', content)
+    if not match:
+        return None
+    return json.loads(match.groups()[0].strip("'").strip('"'))
 
 
 class TestGet(APITestCase):
@@ -25,12 +35,12 @@ class TestPost(APITestCase):
         content = response.content.decode()
         self.assertIn('This field is required.', content)
 
-    def test_when_file_is_empty_then_returns_expected_response(self):
+    def test_when_file_is_empty_then_response_contains_json_label(self):
         with open(os.path.join(TEST_FILES_DIR, 'empty.xml'), 'rb') as xml_file:
             response = self.client.post('/connected/', {'file': xml_file})
 
         self.assertListEqual(
-            [response.status_code, response.json()],
+            [response.status_code, get_json_from_response(response)],
             [status.HTTP_200_OK, {"Root": ""}],
         )
 
@@ -60,6 +70,6 @@ class TestPost(APITestCase):
             ],
         }
         self.assertListEqual(
-            [response.status_code, response.json()],
+            [response.status_code, get_json_from_response(response)],
             [status.HTTP_200_OK, expected_data],
         )

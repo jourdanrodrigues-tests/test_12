@@ -23,5 +23,9 @@
             {{ form.as_p }}
             <button type="submit">Upload</button>
         </form>
+        {% if form.is_valid %}
+            <h2>JSON</h2>
+            <pre>{{ data | safe }}</pre>
+        {% endif %}
     </body>
 </html>
