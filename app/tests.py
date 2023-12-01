@@ -1,59 +1,59 @@
 from pathlib import Path
 
-from django.test import TestCase, Client
+from django.conf import settings
+from rest_framework import status
+from rest_framework.test import APITestCase
+
+TEST_DIR = settings.BASE_DIR / Path('app/test_files')
 
 
-TEST_DIR = Path(__file__).parent / Path('test_files')
-
-
-class XMLConversionTestCase(TestCase):
-    def setUp(self):
-        self.client = Client()
+class XMLConversionTestCase(APITestCase):
+    maxDiff = None
 
     def test_connected_convert_empty_document(self):
-        with (TEST_DIR / Path('empty.xml')).open() as fp:
-            response = self.client.post('/connected/', {
-                'file': fp,
-            })
-            self.assertEqual(response.status_code, 200)
-            self.assertEqual(response.json(), {
-                "Root": "",
-            })
+        with (TEST_DIR / Path('empty.xml')).open() as xml_file:
+            response = self.client.post('/connected/', {'file': xml_file})
+
+        self.assertListEqual(
+            [response.status_code, response.json()],
+            [status.HTTP_200_OK, {"Root": ""}],
+        )
 
     def test_api_convert_empty_document(self):
-        with (TEST_DIR / Path('empty.xml')).open() as fp:
-            response = self.client.post('/api/converter/convert/', {
-                'file': fp,
-            })
-            self.assertEqual(response.status_code, 200)
-            self.assertEqual(response.json(), {
-                "Root": "",
-            })
+        with (TEST_DIR / Path('empty.xml')).open() as xml_file:
+            response = self.client.post('/api/converter/convert/', {'file': xml_file})
+
+        self.assertListEqual(
+            [response.status_code, response.json()],
+            [status.HTTP_200_OK, {"Root": ""}],
+        )
 
     def test_connected_convert_addresses(self):
-        with (TEST_DIR / Path('addresses.xml')).open() as fp:
-            response = self.client.post('/connected/', {
-                'file': fp,
-            })
-            self.assertEqual(response.status_code, 200)
-            self.assertEqual(response.json(), {
-                "Root": [
-                    {
-                        "Address": [
-                            {"StreetLine1": "123 Main St."},
-                            {"StreetLine2": "Suite 400"},
-                            {"City": "San Francisco"},
-                            {"State": "CA"},
-                            {"PostCode": "94103"},
-                        ]
-                    },
-                    {
-                        "Address": [
-                            {"StreetLine1": "400 Market St."},
-                            {"City": "San Francisco"},
-                            {"State": "CA"},
-                            {"PostCode": "94108"},
-                        ]
-                    },
-                ],
-            })
+        with (TEST_DIR / Path('addresses.xml')).open() as xml_file:
+            response = self.client.post('/connected/', {'file': xml_file})
+
+        expected_data = {
+            "Root": [
+                {
+                    "Address": [
+                        {"StreetLine1": "123 Main St."},
+                        {"StreetLine2": "Suite 400"},
+                        {"City": "San Francisco"},
+                        {"State": "CA"},
+                        {"PostCode": "94103"},
+                    ]
+                },
+                {
+                    "Address": [
+                        {"StreetLine1": "400 Market St."},
+                        {"City": "San Francisco"},
+                        {"State": "CA"},
+                        {"PostCode": "94108"},
+                    ]
+                },
+            ],
+        }
+        self.assertListEqual(
+            [response.status_code, response.json()],
+            [status.HTTP_200_OK, expected_data],
+        )
