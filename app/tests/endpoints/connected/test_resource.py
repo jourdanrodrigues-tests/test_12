@@ -6,7 +6,7 @@ from django.conf import settings
 from rest_framework import status
 from rest_framework.test import APITestCase
 
-TEST_FILES_DIR = os.path.join(settings.BASE_DIR, "app", "test_files")
+TEST_FILES_DIR = os.path.join(settings.BASE_DIR, "app", "tests", "mock_files")
 
 
 def get_json_from_response(response) -> str | None:
@@ -43,6 +43,18 @@ class TestPost(APITestCase):
             [response.status_code, get_json_from_response(response)],
             [status.HTTP_200_OK, {"Root": ""}],
         )
+
+    def test_when_file_is_not_xml_then_returns_expected_error_message(self):
+        with open(os.path.join(TEST_FILES_DIR, "blank.pdf"), "rb") as not_xml_file:
+            response = self.client.post("/connected/", {"file": not_xml_file})
+
+        self.assertIn("Invalid XML file.", response.content.decode())
+
+    def test_when_xml_file_has_two_roots_then_returns_expected_error_message(self):
+        with open(os.path.join(TEST_FILES_DIR, "two_roots.xml"), "rb") as two_roots_file:
+            response = self.client.post("/connected/", {"file": two_roots_file})
+
+        self.assertIn("Invalid XML file.", response.content.decode())
 
     def test_that_it_returns_expected_json_content(self):
         with open(os.path.join(TEST_FILES_DIR, "addresses.xml"), "rb") as xml_file:
