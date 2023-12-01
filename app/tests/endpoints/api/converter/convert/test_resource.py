@@ -4,23 +4,23 @@ from django.conf import settings
 from rest_framework import status
 from rest_framework.test import APITestCase
 
-TEST_FILES_DIR = os.path.join(settings.BASE_DIR, 'app', 'test_files')
+TEST_FILES_DIR = os.path.join(settings.BASE_DIR, "app", "test_files")
 
 
 class TestPost(APITestCase):
     maxDiff = None
 
     def test_when_file_is_not_sent_then_returns_expected_response(self):
-        response = self.client.post('/api/converter/convert/')
+        response = self.client.post("/api/converter/convert/")
 
         self.assertListEqual(
             [response.status_code, response.json()],
-            [status.HTTP_400_BAD_REQUEST, {'file': ['No file was submitted.']}],
+            [status.HTTP_400_BAD_REQUEST, {"file": ["No file was submitted."]}],
         )
 
     def test_when_document_is_empty_then_returns_expected_response(self):
-        with open(os.path.join(TEST_FILES_DIR, 'empty.xml'), 'rb') as xml_file:
-            response = self.client.post('/api/converter/convert/', {'file': xml_file})
+        with open(os.path.join(TEST_FILES_DIR, "empty.xml"), "rb") as xml_file:
+            response = self.client.post("/api/converter/convert/", {"file": xml_file})
 
         self.assertListEqual(
             [response.status_code, response.json()],
@@ -28,17 +28,17 @@ class TestPost(APITestCase):
         )
 
     def test_when_document_is_not_xml_then_returns_expected_response(self):
-        with open(os.path.join(TEST_FILES_DIR, 'blank.pdf'), 'rb') as not_xml_file:
-            response = self.client.post('/api/converter/convert/', {'file': not_xml_file})
+        with open(os.path.join(TEST_FILES_DIR, "blank.pdf"), "rb") as not_xml_file:
+            response = self.client.post("/api/converter/convert/", {"file": not_xml_file})
 
         self.assertListEqual(
             [response.status_code, response.json()],
-            [status.HTTP_400_BAD_REQUEST, {'file': ['Invalid XML file.']}],
+            [status.HTTP_400_BAD_REQUEST, {"file": ["Invalid XML file."]}],
         )
 
     def test_that_it_returns_expected_response(self):
-        with open(os.path.join(TEST_FILES_DIR, 'addresses.xml'), 'rb') as xml_file:
-            response = self.client.post('/api/converter/convert/', {'file': xml_file})
+        with open(os.path.join(TEST_FILES_DIR, "addresses.xml"), "rb") as xml_file:
+            response = self.client.post("/api/converter/convert/", {"file": xml_file})
 
         expected_data = {
             "Root": [

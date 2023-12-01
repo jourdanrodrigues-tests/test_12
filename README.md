@@ -7,9 +7,9 @@ This challenge is designed to evaluate several things:
  - How well you handle data validation and exception handling
  - Your ability to work with connected Django pages
  - Your ability to work with Django Rest Framework
- 
+
 It is intended to take 2-4 hours. After you submit your solution (either by emailing us a .tar or .zip file, or uploading to GitHub), we will schedule a call to talk through your solution and how it could be extended to accomplish further goals.
- 
+
 ## Setting Up
 
 Install Python 3.7 or later if it is not already installed. Then, set up and enter a virtual environment and run `pip install -r requirements.txt` to install the dependencies. You should then be able to run the project from the root directory by running `python manage.py runserver`.

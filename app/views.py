@@ -1,4 +1,5 @@
 import json
+
 from django.http import HttpResponse
 from django.shortcuts import render
 from rest_framework import status
@@ -12,16 +13,16 @@ from app.serializers import XMLToJSONConverterSerializer
 
 
 def upload_page(request):
-    if request.method not in {'POST', 'GET'}:
+    if request.method not in {"POST", "GET"}:
         return HttpResponse(status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
     display_data = None
-    if request.method == 'GET':
+    if request.method == "GET":
         form = UploadFileForm()
     else:
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
-            display_data = json.dumps(form.cleaned_data['file'], indent=4)
+            display_data = json.dumps(form.cleaned_data["file"], indent=4)
 
     return render(
         request,

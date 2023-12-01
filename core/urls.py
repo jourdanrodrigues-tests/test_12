@@ -14,16 +14,16 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
 from app import views
 
 router = DefaultRouter()
-router.register('converter', views.ConverterViewSet, basename='converter')
+router.register("converter", views.ConverterViewSet, basename="converter")
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('connected/', views.upload_page, name='xml_to_json_converter'),
-    path('api/', include(router.urls)),
+    path("admin/", admin.site.urls),
+    path("connected/", views.upload_page, name="xml_to_json_converter"),
+    path("api/", include(router.urls)),
 ]
