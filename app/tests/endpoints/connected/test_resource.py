@@ -27,7 +27,7 @@ class TestGet(APITestCase):
 class TestPost(APITestCase):
     maxDiff = None
 
-    def test_when_file_is_not_xml_then_returns_expected_response(self):
+    def test_when_file_is_not_xml_then_returns_expected_message(self):
         response = self.client.post('/connected/')
 
         # This is an HTML response, so regardless of an error or success, it'll return 200 with the content to be
@@ -35,7 +35,7 @@ class TestPost(APITestCase):
         content = response.content.decode()
         self.assertIn('This field is required.', content)
 
-    def test_when_file_is_empty_then_response_contains_json_label(self):
+    def test_when_file_is_empty_then_returns_expected_json_content(self):
         with open(os.path.join(TEST_FILES_DIR, 'empty.xml'), 'rb') as xml_file:
             response = self.client.post('/connected/', {'file': xml_file})
 
@@ -44,7 +44,7 @@ class TestPost(APITestCase):
             [status.HTTP_200_OK, {"Root": ""}],
         )
 
-    def test_that_it_returns_expected_response(self):
+    def test_that_it_returns_expected_json_content(self):
         with open(os.path.join(TEST_FILES_DIR, 'addresses.xml'), 'rb') as xml_file:
             response = self.client.post('/connected/', {'file': xml_file})
 
