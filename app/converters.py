@@ -1,4 +1,13 @@
+import contextlib
 from xml.etree import ElementTree
+
+@contextlib.contextmanager
+def xml_parse_error_raise(exception: Exception):
+    try:
+        yield
+    except ElementTree.ParseError:
+        raise exception
+
 
 
 def convert_xml_to_json(xml) -> dict:

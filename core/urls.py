@@ -24,6 +24,6 @@ router.register('converter', views.ConverterViewSet, basename='converter')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('connected/', views.upload_page),
+    path('connected/', views.upload_page, name='xml_to_json_converter'),
     path('api/', include(router.urls)),
 ]

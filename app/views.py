@@ -6,18 +6,24 @@ from rest_framework.parsers import MultiPartParser
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
-from app.converters import convert_xml_to_json
+from app.forms import UploadFileForm
 from app.serializers import XMLToJSONConverterSerializer
 
 
 def upload_page(request):
+    if request.method == 'POST':
+        form = UploadFileForm(request.POST, request.FILES)
+        if form.is_valid():
+            return JsonResponse(form.cleaned_data['file'])
+        return JsonResponse({'error': 'Invalid form.'}, status=status.HTTP_400_BAD_REQUEST)
     if request.method == 'GET':
-        return render(request, "upload_page.html")
-    elif request.method == 'POST':
-        file = request.FILES.get('file')
-        return JsonResponse(convert_xml_to_json(file))
+        form = UploadFileForm()
+        return render(request, "upload_page.html", {"form": form})
 
-    return JsonResponse({'error': 'Request method not allowed.'}, status=405)
+    return JsonResponse(
+        {'error': 'Request method not allowed.'},
+        status=status.HTTP_405_METHOD_NOT_ALLOWED,
+    )
 
 
 class ConverterViewSet(GenericViewSet):
