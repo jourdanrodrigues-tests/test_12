@@ -35,14 +35,20 @@ class TestPost(APITestCase):
         content = response.content.decode()
         self.assertIn("This field is required.", content)
 
-    def test_when_file_is_empty_then_returns_expected_json_content(self):
-        with open(os.path.join(TEST_FILES_DIR, "empty.xml"), "rb") as xml_file:
+    def test_when_file_is_an_empty_root_then_returns_expected_json_content(self):
+        with open(os.path.join(TEST_FILES_DIR, "empty_root.xml"), "rb") as xml_file:
             response = self.client.post("/connected/", {"file": xml_file})
 
         self.assertListEqual(
             [response.status_code, get_json_from_response(response)],
             [status.HTTP_200_OK, {"Root": ""}],
         )
+
+    def test_when_file_is_empty_then_returns_expected_json_content(self):
+        with open(os.path.join(TEST_FILES_DIR, "empty.xml"), "rb") as xml_file:
+            response = self.client.post("/connected/", {"file": xml_file})
+
+        self.assertIn("The submitted file is empty.", response.content.decode())
 
     def test_when_file_is_not_xml_then_returns_expected_error_message(self):
         with open(os.path.join(TEST_FILES_DIR, "blank.pdf"), "rb") as not_xml_file:
